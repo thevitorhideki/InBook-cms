@@ -28,31 +28,39 @@ export function Authors() {
   }
 
   return (
-    <div className="flex gap-4 flex-col">
+    <div className="flex flex-col gap-4">
       <h1 className="font-semibold text-xl">Autores cadastrados</h1>
 
-      <div className="flex justify-center gap-4">
-        {authors.length > 0 ? (
-          authors.map((author) => (
-            <div key={author.id} className="w-1/5 grid gap-2">
-              <img src="https://placehold.co/1000x1000/png" alt="placeholder" />
-              <div className="flex justify-between items-center">
-                <h1 className="font-semibold text-lg">{author.name}</h1>
-                <div className="grid gap-2">
-                  <p className="cursor-pointer" onClick={() => handleDelete(author.id)}>
+      {authors.length > 0 ? (
+        <table className="min-w-full table-auto border-collapse border border-gray-300">
+          <thead>
+            <tr>
+              <th className="border border-gray-300 px-4 py-2 text-left">Nome</th>
+              <th className="border border-gray-300 px-4 py-2 text-center">Deletar</th>
+              <th className="border border-gray-300 px-4 py-2 text-center">Editar</th>
+            </tr>
+          </thead>
+          <tbody>
+            {authors.map((author) => (
+              <tr key={author.id}>
+                <td className="border border-gray-300 px-4 py-2">{author.name}</td>
+                <td className="border border-gray-300 px-4 py-2 text-center">
+                  <p className="cursor-pointer flex justify-center" onClick={() => handleDelete(author.id)}>
                     <Trash size={20} />
                   </p>
-                  <a href={`/authors/${author.id}`}>
+                </td>
+                <td className="border border-gray-300 px-4 py-2 text-center">
+                  <a href={`/authors/${author.id}`} className="flex justify-center">
                     <Edit size={20} />
                   </a>
-                </div>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p className="text-center">Nenhum autor cadastrado</p>
-        )}
-      </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <p className="text-center">Nenhum autor cadastrado</p>
+      )}
     </div>
   );
 }

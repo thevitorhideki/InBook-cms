@@ -1,13 +1,14 @@
 export function Header() {
   return (
-    <header className="flex w-full justify-around py-5">
+    <header className="flex w-full justify-around items-center py-5">
       <div className="w-1/4">
-        <a href="/" className=" font-semibold text-xl text-center">
-          InBook
-        </a>
+        <h1 className=" font-semibold text-xl text-center">InBook</h1>
       </div>
       <nav className="w-1/2 text-center">
         <ul className="flex items-center justify-around">
+          <li>
+            <a href="/">Cadastrar livros</a>
+          </li>
           <li>
             <a href="/books">Livros</a>
           </li>
