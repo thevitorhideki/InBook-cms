@@ -1,10 +1,10 @@
 import { Edit, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import { deleteBook, fetchBooks } from "../services/api";
-import { BookCollection } from "../types";
+import { BookDetails } from "../types";
 
 export function Books() {
-  const [books, setBooks] = useState<BookCollection[] | null>(null);
+  const [books, setBooks] = useState<BookDetails[] | null>(null);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -29,7 +29,7 @@ export function Books() {
 
   return (
     <div className="flex gap-4 flex-col">
-      <h1 className="font-semibold text-xl">Resumos cadastrados</h1>
+      <h1 className="font-semibold text-xl">Livros cadastrados</h1>
 
       <div className="flex justify-center gap-4">
         {books.length > 0 ? (
@@ -39,7 +39,9 @@ export function Books() {
               <div className="flex justify-between items-center">
                 <div>
                   <h1 className="font-semibold text-lg">{book.title}</h1>
-                  <p>{book.author.name}</p>
+                  {book.authors.map((author) => (
+                    <p>{author.name}</p>
+                  ))}
                 </div>
                 <div className="grid gap-2">
                   <p className="cursor-pointer" onClick={() => handleDelete(book.id)}>

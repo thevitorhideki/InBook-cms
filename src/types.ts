@@ -5,30 +5,22 @@ export interface Author {
 
 export interface Book {
   title: string;
-  authorId: string;
+  authorIds: string[];
 }
 
 export interface UpdateBook {
   title?: string;
-  authorId?: string;
+  authorIds?: string;
 }
 
 export interface BookDetails {
   id: string;
   title: string;
   slug: string;
-  author: {
+  authors: {
     authorId: string;
     name: string;
-    books: BookCollection[];
-  };
-}
-
-export interface BookCollection {
-  id: string;
-  title: string;
-  slug: string;
-  author: {
-    name: string;
-  };
+  }[];
+  createdAt: Date;
+  updatedAt: Date;
 }

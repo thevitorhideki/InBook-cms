@@ -12,14 +12,14 @@ import { generateSlug } from "../utils/SlugGenerator";
 
 export default function BookForm() {
   const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState<Author | null>(null);
+  const [authors, setAuthors] = useState<Author[]>([]);
   const [file, setFile] = useState<FileList | null>(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!title || !author || !file) {
+    if (!title || authors.length === 0 || !file) {
       alert("Preencha todos os campos e envie o resumo.");
       return;
     }
@@ -31,7 +31,7 @@ export default function BookForm() {
       await uploadFiles(file, slug);
 
       // Cadastro do livro
-      await createBook({ title, authorId: author.id });
+      await createBook({ title, authorIds: authors.map((author) => author.id) });
 
       alert("Livro cadastrado com sucesso!");
     } catch (error) {
@@ -56,7 +56,7 @@ export default function BookForm() {
             required
           />
         </div>
-        <AuthorSearch onAuthorSelect={setAuthor} />
+        <AuthorSearch onAuthorsSelect={setAuthors} authors={authors} />
         <FileUpload onFileSelect={setFile} />
         <Button type="submit" className="w-full">
           Salvar

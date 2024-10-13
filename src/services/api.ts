@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Author, Book, BookCollection, BookDetails, UpdateBook } from "../types";
+import { Author, Book, BookDetails, UpdateBook } from "../types";
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -35,10 +35,14 @@ export const deleteAuthor = async (id: string): Promise<void> => {
   await api.delete(`/authors/${id}`);
 };
 
-export const fetchBooks = async (): Promise<BookCollection[]> => {
-  const response = await api.get<{ books: BookCollection[] }>("/books");
+export const fetchBooks = async (name?: string): Promise<BookDetails[]> => {
+  if (name) {
+    const response = await api.get<BookDetails[]>(`/books?title=${name}`);
+    return response.data;
+  }
 
-  return response.data.books;
+  const response = await api.get<BookDetails[]>("/books");
+  return response.data;
 };
 
 export const fetchBookById = async (bookId: string): Promise<BookDetails> => {
