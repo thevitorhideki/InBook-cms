@@ -15,19 +15,19 @@ const router = createBrowserRouter([
     element: <BookForm />,
   },
   {
-    path: "books",
+    path: "/books",
     element: <Books />,
   },
   {
-    path: "books/:bookId",
+    path: "/books/:bookId",
     element: <EditBook />,
   },
   {
-    path: "authors",
+    path: "/authors",
     element: <Authors />,
   },
   {
-    path: "authors/:authorId",
+    path: "/authors/:authorId",
     element: <EditAuthor />,
   },
 ]);
