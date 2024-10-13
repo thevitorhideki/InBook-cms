@@ -1,4 +1,4 @@
-import { X } from "lucide-react"; // Ícone para remover autor
+import { Loader2, X } from "lucide-react"; // Ícone para remover autor e ícone de loading
 import { useEffect, useState } from "react";
 import { createAuthor, fetchAuthors } from "../services/api";
 import { Author } from "../types";
@@ -16,21 +16,28 @@ export function AuthorSearch({ onAuthorsSelect, authors = [] }: AuthorSearchProp
   const [options, setOptions] = useState<Author[]>([]);
   const [open, setOpen] = useState(false);
   const [selectedAuthors, setSelectedAuthors] = useState<Author[]>(authors);
+  const [isLoading, setIsLoading] = useState(false); // Estado de carregamento
 
   useEffect(() => {
     if (inputValue) {
+      setIsLoading(true); // Iniciar o carregamento
       const delayDebounceFn = setTimeout(() => {
         fetchAuthors(inputValue).then((authors) => {
           // Filtrar autores já selecionados
           const filteredAuthors = authors.filter((author) => !selectedAuthors.some((a) => a.id === author.id));
           setOptions(filteredAuthors);
+          setIsLoading(false); // Finalizar o carregamento
         });
       }, 300);
 
-      return () => clearTimeout(delayDebounceFn);
+      return () => {
+        clearTimeout(delayDebounceFn);
+        setIsLoading(false); // Finalizar o carregamento se a busca for cancelada
+      };
     } else {
       setOptions([]);
       setOpen(false);
+      setIsLoading(false); // Certifique-se de que o carregamento está desativado
     }
   }, [inputValue, selectedAuthors]);
 
@@ -69,22 +76,26 @@ export function AuthorSearch({ onAuthorsSelect, authors = [] }: AuthorSearchProp
     <div className="grid w-full items-center gap-1.5">
       <Label className="font-semibold">Autores</Label>
       <div className="flex">
-        <Input
-          className="w-full rounded-r-none"
-          placeholder="Digite o nome do autor"
-          value={inputValue}
-          onChange={(e) => {
-            setInputValue(e.target.value);
-            setOpen(true);
-          }}
-        />
+        <div className="relative w-full">
+          <Input
+            className="w-full rounded-r-none"
+            placeholder="Digite o nome do autor"
+            value={inputValue}
+            onChange={(e) => {
+              setInputValue(e.target.value);
+              setOpen(true);
+            }}
+          />
+          {isLoading && <Loader2 className="absolute right-2 top-2 animate-spin" size={20} />}
+        </div>
         <Button
           type="button"
           className="rounded-l-none"
           disabled={
             !inputValue ||
             options.find((author) => author.name === inputValue) !== undefined ||
-            selectedAuthors.some((author) => author.name === inputValue)
+            selectedAuthors.some((author) => author.name === inputValue) ||
+            isLoading
           }
           onClick={handleCreateNewAuthor}
         >

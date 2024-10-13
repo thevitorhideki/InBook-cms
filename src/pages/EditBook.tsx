@@ -1,3 +1,4 @@
+import { Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AuthorSearch from "../components/AuthorSearch";
@@ -10,22 +11,22 @@ import { Author, BookDetails, UpdateBook } from "../types";
 export function EditBook() {
   const [book, setBook] = useState<BookDetails | null>(null);
   const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState<Author | null>(null);
+  const [authors, setAuthors] = useState<Author[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const { bookId } = useParams();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     if (!bookId) return;
 
     const newBook: UpdateBook = {
       title: book?.title,
-      authorId: author?.id,
+      authorIds: authors.map((author) => author.id),
     };
-
-    console.log(author);
 
     try {
       await updateBook(bookId, newBook);
@@ -35,6 +36,7 @@ export function EditBook() {
       console.error(error);
       alert("Ocorreu um erro ao editar o livro.");
     } finally {
+      setIsSubmitting(false);
       navigate("/books");
     }
   };
@@ -45,7 +47,11 @@ export function EditBook() {
         fetchBookById(bookId).then((book) => {
           setBook(book);
           setTitle(book.title);
-          setAuthor({ id: book.author.authorId, name: book.author.name });
+          setAuthors(
+            book.authors.map((author) => {
+              return { id: author.authorId, name: author.name };
+            })
+          );
         });
       }
     }, 300);
@@ -68,9 +74,9 @@ export function EditBook() {
             required
           />
         </div>
-        <AuthorSearch onAuthorSelect={setAuthor} author={author} />
-        <Button type="submit" className="w-full">
-          Salvar
+        <AuthorSearch onAuthorsSelect={setAuthors} authors={authors} />
+        <Button type="submit" className="w-full" disabled={isSubmitting}>
+          {isSubmitting ? <Loader2 size={24} className="animate-spin" /> : "Salvar"}
         </Button>
       </form>
     </div>

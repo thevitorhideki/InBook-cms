@@ -1,35 +1,29 @@
+import { Loader2 } from "lucide-react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthorSearch from "../components/AuthorSearch";
-import { FileUpload } from "../components/FileUpload";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { createBook } from "../services/api";
-import { uploadFiles } from "../services/storage";
 import { Author } from "../types";
-import { generateSlug } from "../utils/SlugGenerator";
 
 export default function BookForm() {
   const [title, setTitle] = useState("");
   const [authors, setAuthors] = useState<Author[]>([]);
-  const [file, setFile] = useState<FileList | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
-    if (!title || authors.length === 0 || !file) {
+    if (!title || authors.length === 0) {
       alert("Preencha todos os campos e envie o resumo.");
       return;
     }
 
     try {
-      const slug = generateSlug(title);
-
-      // Cadastro do resumo
-      await uploadFiles(file, slug);
-
       // Cadastro do livro
       await createBook({ title, authorIds: authors.map((author) => author.id) });
 
@@ -38,6 +32,7 @@ export default function BookForm() {
       console.error(error);
       alert("Ocorreu um erro ao cadastrar o livro.");
     } finally {
+      setIsSubmitting(false);
       navigate("/books");
     }
   };
@@ -57,9 +52,8 @@ export default function BookForm() {
           />
         </div>
         <AuthorSearch onAuthorsSelect={setAuthors} authors={authors} />
-        <FileUpload onFileSelect={setFile} />
-        <Button type="submit" className="w-full">
-          Salvar
+        <Button type="submit" className="w-full" disabled={isSubmitting}>
+          {isSubmitting ? <Loader2 size={24} className="animate-spin" /> : "Salvar"}
         </Button>
       </form>
     </div>

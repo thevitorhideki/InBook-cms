@@ -1,3 +1,4 @@
+import { Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "../components/ui/button";
@@ -7,12 +8,14 @@ import { fetchAuthorById, updateAuthor } from "../services/api";
 
 export function EditAuthor() {
   const [name, setName] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const { authorId } = useParams();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     try {
       if (authorId) {
@@ -24,6 +27,7 @@ export function EditAuthor() {
       console.error(error);
       alert("Ocorreu um erro ao editar o autor.");
     } finally {
+      setIsSubmitting(false);
       navigate("/authors");
     }
   };
@@ -51,8 +55,8 @@ export function EditAuthor() {
             required
           />
         </div>
-        <Button type="submit" className="w-full">
-          Salvar
+        <Button type="submit" className="w-full" disabled={isSubmitting}>
+          {isSubmitting ? <Loader2 size={24} className="animate-spin" /> : "Salvar"}
         </Button>
       </form>
     </div>

@@ -10,7 +10,7 @@ export interface Book {
 
 export interface UpdateBook {
   title?: string;
-  authorIds?: string;
+  authorIds?: string[];
 }
 
 export interface BookDetails {
