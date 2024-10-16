@@ -28,7 +28,7 @@ export function Authors() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 max-w-screen-lg mx-auto">
       <h1 className="font-semibold text-xl">Autores cadastrados</h1>
 
       {authors.length > 0 ? (

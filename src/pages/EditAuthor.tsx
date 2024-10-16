@@ -8,14 +8,14 @@ import { fetchAuthorById, updateAuthor } from "../services/api";
 
 export function EditAuthor() {
   const [name, setName] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const { authorId } = useParams();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
+    setIsLoading(true);
 
     try {
       if (authorId) {
@@ -27,7 +27,7 @@ export function EditAuthor() {
       console.error(error);
       alert("Ocorreu um erro ao editar o autor.");
     } finally {
-      setIsSubmitting(false);
+      setIsLoading(false);
       navigate("/authors");
     }
   };
@@ -43,7 +43,7 @@ export function EditAuthor() {
   }, [authorId]);
 
   return (
-    <div className="max-w-lg mx-auto p-4 grid items-center content-center flex-1 w-full">
+    <div className="max-w-lg mx-auto p-4 grid items-center content-center h-[90vh] w-full">
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <div className="grid w-full items-center gap-1.5">
           <Label className="font-semibold">Nome do autor</Label>
@@ -55,8 +55,8 @@ export function EditAuthor() {
             required
           />
         </div>
-        <Button type="submit" className="w-full" disabled={isSubmitting}>
-          {isSubmitting ? <Loader2 size={24} className="animate-spin" /> : "Salvar"}
+        <Button type="submit" className="w-full" disabled={isLoading}>
+          {isLoading ? <Loader2 size={24} className="animate-spin" /> : "Salvar"}
         </Button>
       </form>
     </div>

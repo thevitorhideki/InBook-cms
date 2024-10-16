@@ -34,9 +34,7 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <div className="max-w-screen-lg mx-auto h-screen flex flex-col">
-      <Header />
-      <RouterProvider router={router} />
-    </div>
+    <Header />
+    <RouterProvider router={router} />
   </StrictMode>
 );

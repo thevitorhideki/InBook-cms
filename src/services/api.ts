@@ -62,3 +62,11 @@ export const updateBook = async (bookId: string, book: UpdateBook): Promise<void
 export const deleteBook = async (bookId: string): Promise<void> => {
   await api.delete(`/books/${bookId}`);
 };
+
+export const textToSpeech = async (text: string): Promise<string> => {
+  const response = await api.post("/tts", { text }, { responseType: "blob" });
+
+  const audioUrl = URL.createObjectURL(response.data);
+
+  return audioUrl;
+};

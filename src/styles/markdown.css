@@ -1,0 +1,39 @@
+.markdown-preview h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.markdown-preview h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: left;
+  margin-top: 1rem;
+}
+
+.markdown-preview h3 {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.markdown-preview ul,
+.markdown-preview ol {
+  margin-left: 20px;
+}
+
+.markdown-preview ol li {
+  list-style-type: decimal;
+}
+
+.markdown-preview li {
+  list-style-type: disc;
+}
+
+.markdown-preview img {
+  margin: 0 auto;
+}
+
+.markdown-preview blockquote {
+  padding: 1rem;
+  border-radius: 8px;
+}

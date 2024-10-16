@@ -12,16 +12,20 @@ export function EditBook() {
   const [book, setBook] = useState<BookDetails | null>(null);
   const [title, setTitle] = useState("");
   const [authors, setAuthors] = useState<Author[]>([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const { bookId } = useParams();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
+    setIsLoading(true);
 
-    if (!bookId) return;
+    if (!bookId || authors.length === 0) {
+      alert("O livro precisa de pelo ou menos 1 autor");
+      setIsLoading(false);
+      return;
+    }
 
     const newBook: UpdateBook = {
       title: book?.title,
@@ -36,7 +40,7 @@ export function EditBook() {
       console.error(error);
       alert("Ocorreu um erro ao editar o livro.");
     } finally {
-      setIsSubmitting(false);
+      setIsLoading(false);
       navigate("/books");
     }
   };
@@ -62,7 +66,7 @@ export function EditBook() {
   if (!book) return;
 
   return (
-    <div className="max-w-lg mx-auto p-4 grid items-center content-center flex-1 w-full">
+    <div className="max-w-lg mx-auto p-4 grid items-center content-center h-[90vh] w-full">
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <div className="grid w-full items-center gap-1.5">
           <Label className="font-semibold">Título do Livro</Label>
@@ -75,8 +79,8 @@ export function EditBook() {
           />
         </div>
         <AuthorSearch onAuthorsSelect={setAuthors} authors={authors} />
-        <Button type="submit" className="w-full" disabled={isSubmitting}>
-          {isSubmitting ? <Loader2 size={24} className="animate-spin" /> : "Salvar"}
+        <Button type="submit" className="w-full" disabled={isLoading}>
+          {isLoading ? <Loader2 size={24} className="animate-spin" /> : "Salvar"}
         </Button>
       </form>
     </div>

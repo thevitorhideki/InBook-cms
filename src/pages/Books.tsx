@@ -28,7 +28,7 @@ export function Books() {
   }
 
   return (
-    <div className="flex gap-4 flex-col">
+    <div className="flex gap-4 flex-col max-w-screen-lg mx-auto">
       <h1 className="font-semibold text-xl">Livros cadastrados</h1>
 
       <div className="flex justify-center gap-4">
@@ -40,7 +40,7 @@ export function Books() {
                 <div>
                   <h1 className="font-semibold text-lg">{book.title}</h1>
                   {book.authors.map((author) => (
-                    <p>{author.name}</p>
+                    <p key={author.authorId}>{author.name}</p>
                   ))}
                 </div>
                 <div className="grid gap-2">
