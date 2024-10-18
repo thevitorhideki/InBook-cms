@@ -28,7 +28,7 @@ export function EditBook() {
     }
 
     const newBook: UpdateBook = {
-      title: book?.title,
+      title: title,
       authorIds: authors.map((author) => author.id),
     };
 
